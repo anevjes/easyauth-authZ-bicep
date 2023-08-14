@@ -1,10 +1,7 @@
-param appSvcName string = 'anevjes-sample-easyauth'
-param clientId string = 'insertYourClientId'
-param clientSecretSettingName string = 'MICROSOFT_PROVIDER_AUTHENTICATION_SECRET'
-param allowedGroupObjectIds array = [
-  'objectIdofGroup'
-]
-param allowedIdentityObjectIds array = []
+param appSvcName string = '<yourWebAppName>'
+param clientId string = '<your-registered-clientid>'
+param clientSecretSettingName string = 'AUTH_CLIENT_SECRET'
+param allowedIdentityObjectIds array = ['<objectId-For_User>']
 
 
 
@@ -27,12 +24,13 @@ resource webApp 'Microsoft.Web/sites@2022-03-01' existing = {
       }
       platform: {
         enabled: true
+        runtimeVersion:'~1'
       }
       identityProviders: {
         azureActiveDirectory: {
           enabled: true
           login: {
-            loginParameters: []
+            disableWWWAuthenticate:false
           }
           registration: {
             clientId: clientId
@@ -40,14 +38,11 @@ resource webApp 'Microsoft.Web/sites@2022-03-01' existing = {
             openIdIssuer: 'https://sts.windows.net/${tenant().tenantId}/v2.0'
           }
           validation: {
-                    allowedAudiences: [
-                    ]
+            jwtClaimChecks:null
+                    allowedAudiences: [clientId]
                     defaultAuthorizationPolicy: {
-                      allowedApplications: [
-                      ]
+                      allowedApplications: [clientId]
                       allowedPrincipals: {
-                        groups: allowedGroupObjectIds
-                        
                         identities: allowedIdentityObjectIds
                       }
                     }
