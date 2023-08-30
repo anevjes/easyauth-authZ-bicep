@@ -1,8 +1,8 @@
 param appSvcName string = '<yourWebAppName>'
 param clientId string = '<your-registered-clientid>'
 param clientSecretSettingName string = 'AUTH_CLIENT_SECRET'
-param allowedIdentityObjectIds array = ['<objectId-For_User>']
-
+//param allowedIdentityObjectIds array = ['<objectId-For_User>']
+param allowedGroupObjectIds array = ['<objectIdForGroups>']
 
 
 
@@ -43,7 +43,8 @@ resource webApp 'Microsoft.Web/sites@2022-03-01' existing = {
                     defaultAuthorizationPolicy: {
                       allowedApplications: [clientId]
                       allowedPrincipals: {
-                        identities: allowedIdentityObjectIds
+                        //identities: allowedIdentityObjectIds
+                        groups:allowedGroupObjectIds
                       }
                     }
                   }
